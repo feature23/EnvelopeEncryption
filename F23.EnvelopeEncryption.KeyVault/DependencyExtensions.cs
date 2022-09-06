@@ -1,4 +1,5 @@
 using F23.EnvelopeEncryption.KeyVault;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
@@ -19,7 +20,8 @@ public static class DependencyExtensions
         builder.Services.AddTransient<IContentKeyEncryptionService, KeyVaultContentKeyEncryptionService>();
         builder.Services.AddTransient<CryptographyClientFactory>();
 
-        builder.Services.AddOptions<KeyVaultEnvelopeEncryptionOptions>(KeyVaultEnvelopeEncryptionOptions.Options);
+        builder.Services.AddOptions<KeyVaultEnvelopeEncryptionOptions>()
+            .Configure<IConfiguration>((options, config) => config.GetSection(KeyVaultEnvelopeEncryptionOptions.Options).Bind(options));
 
         return builder;
     }

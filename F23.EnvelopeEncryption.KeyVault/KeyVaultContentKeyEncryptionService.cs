@@ -38,6 +38,11 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
     /// <returns>Returns the encrypted key.</returns>
     public async Task<EncryptedKey> EncryptContentEncryptionKeyAsync(byte[] key, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrEmpty(_options.KeyEncryptionKeyName))
+        {
+            throw new InvalidOperationException($"Missing KeyEncryptionKeyName options value in {KeyVaultEnvelopeEncryptionOptions.Options}");
+        }
+        
         var kek = await _keyClient.GetKeyAsync(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion, 
             cancellationToken);
 

@@ -7,6 +7,17 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <Version>0.1.0</Version>
+        <PackageId>F23.EnvelopeEncryption.KeyVault</PackageId>
+        <PackageTags>encryption;envelope;key;vault;azure</PackageTags>
+        <Copyright>Copyright 2022 feature[23]</Copyright>
+        <Authors>Paul Irwin, James Blair</Authors>
+        <Description>Azure Key Vault extensions for the F23.EnvelopeEncryption library.</Description>
+        <PackageProjectUrl>https://github.com/feature23/EnvelopeEncryption</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageIcon>logo.png</PackageIcon>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +29,10 @@
         <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.3.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\logo.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

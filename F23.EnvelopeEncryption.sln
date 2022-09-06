@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F23.EnvelopeEncryption.KeyV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F23.EnvelopeEncryption.EntityFrameworkCore", "F23.EnvelopeEncryption.EntityFrameworkCore\F23.EnvelopeEncryption.EntityFrameworkCore.csproj", "{9730DBF7-507C-4E80-A2FC-DB175E59969A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F23.EnvelopeEncryption.Tests", "F23.EnvelopeEncryption.Tests\F23.EnvelopeEncryption.Tests.csproj", "{DC6C88CB-5CF6-4A57-9983-96B141C3ACC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{9730DBF7-507C-4E80-A2FC-DB175E59969A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9730DBF7-507C-4E80-A2FC-DB175E59969A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9730DBF7-507C-4E80-A2FC-DB175E59969A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC6C88CB-5CF6-4A57-9983-96B141C3ACC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC6C88CB-5CF6-4A57-9983-96B141C3ACC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC6C88CB-5CF6-4A57-9983-96B141C3ACC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC6C88CB-5CF6-4A57-9983-96B141C3ACC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

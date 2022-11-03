@@ -31,9 +31,14 @@ public class EncryptedValue
     /// </summary>
     /// <param name="other">Another EncryptedValue to compare.</param>
     /// <returns>Returns true if equal.</returns>
-    protected bool Equals(EncryptedValue other)
+    protected bool Equals(EncryptedValue? other)
     {
-        return Iv.Equals(other.Iv) && Ciphertext.Equals(other.Ciphertext);
+        if (other != null)
+        {
+            return Iv.Equals(other.Iv) && Ciphertext.Equals(other.Ciphertext);
+        }
+
+        return false;
     }
 
     /// <summary>

@@ -19,6 +19,9 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="F23.EnvelopeEncryption.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\F23.EnvelopeEncryption\F23.EnvelopeEncryption.csproj" />
   </ItemGroup>
   <ItemGroup>

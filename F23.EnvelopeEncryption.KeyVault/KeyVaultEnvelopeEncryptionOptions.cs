@@ -20,4 +20,10 @@ public class KeyVaultEnvelopeEncryptionOptions
     /// If not provided (or is null), this will use the latest version of the key.
     /// </summary>
     public string? KeyEncryptionKeyVersion { get; set; }
+    
+    /// <summary>
+    /// Optional. If true, excludes Managed Identity from the chained credential process. This is useful for performance
+    /// when running outside of Azure (i.e., local debugging).
+    /// </summary>
+    public bool ExcludeManagedIdentityCredential { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using Azure.Security.KeyVault.Keys;
+﻿using Azure.Identity;
+using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Keys.Cryptography;
 using Microsoft.Extensions.Options;
 
@@ -46,7 +47,7 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
         var kek = await _keyClient.GetKeyAsync(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion, 
             cancellationToken);
 
-        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(kek.Value.Id);
+        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(kek.Value.Id, CreateAzureCredentialOptions());
 
         // TODO: support specifying algorithm in options
         var result = await cryptoClient.EncryptAsync(EncryptParameters.RsaOaep256Parameters(key), cancellationToken);
@@ -62,11 +63,24 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
     /// <returns>Returns the decrypted key.</returns>
     public async Task<byte[]> DecryptContentEncryptionKeyAsync(EncryptedKey key, CancellationToken cancellationToken = default)
     {
-        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(key.KeyId);
+        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(key.KeyId, CreateAzureCredentialOptions());
         
         // TODO: support determining algorithm from key.Algorithm value
         var result = await cryptoClient.DecryptAsync(DecryptParameters.RsaOaep256Parameters(key.Key), cancellationToken);
 
         return result.Plaintext;
+    }
+
+    internal DefaultAzureCredentialOptions? CreateAzureCredentialOptions()
+    {
+        if (_options.ExcludeManagedIdentityCredential)
+        {
+            return new DefaultAzureCredentialOptions
+            {
+                ExcludeManagedIdentityCredential = true
+            };
+        }
+
+        return null;
     }
 }

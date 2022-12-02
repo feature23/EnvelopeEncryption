@@ -23,7 +23,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Pack NuGet
-      run: dotnet pack --no-build
+    - name: Pack NuGet - Main Library
+      run: dotnet pack **/F23.EnvelopeEncryption.csproj --no-build
+    - name: Pack NuGet - KeyVault Library
+      run: dotnet pack **/F23.EnvelopeEncryption.KeyVault.csproj --no-build
     - name: Publish NuGet
       run: dotnet nuget push "**/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_PUSH_API_KEY }}

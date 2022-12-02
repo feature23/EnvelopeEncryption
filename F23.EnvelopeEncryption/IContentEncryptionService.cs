@@ -21,14 +21,50 @@ public interface IContentEncryptionService
     /// </summary>
     /// <param name="key">The plaintext Content Encryption Key (CEK).</param>
     /// <param name="value">The plaintext string value to encrypt.</param>
-    /// <returns>Returns a new EncryptedValue instance.</returns>
+    /// <returns>Returns a new <see cref="EncryptedValue"/> instance.</returns>
     EncryptedValue EncryptContentString(byte[] key, string value);
+
+    /// <summary>
+    /// Encrypts the provided binary content <paramref name="value" /> using the given plaintext <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key">The plaintext Content Encryption Key (CEK).</param>
+    /// <param name="value">The plaintext byte array value to encrypt.</param>
+    /// <returns>Returns a new <see cref="EncryptedValue"/> instance.</returns>
+    EncryptedValue EncryptContent(byte[] key, byte[] value);
+
+    /// <summary>
+    /// Encrypts the provided plaintext <paramref name="inputStream"/> to the provided <paramref name="outputStream"/>.
+    /// </summary>
+    /// <param name="key">The plaintext Content Encryption Key (CEK).</param>
+    /// <param name="inputStream">The <see cref="Stream"/> representing the plaintext data to be encrypted.</param>
+    /// <param name="outputStream">The <see cref="Stream"/> where the encrypted content will be written.</param>
+    /// <returns>Returns a task that represents the asynchronous decryption operation.</returns>
+    Task<InitializationVector> EncryptContent(byte[] key, Stream inputStream, Stream outputStream);
+    
+    /// <summary>
+    /// Decrypts the provided encrypted <paramref name="value"/> using the given plaintext <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key">The plaintext Content Encryption Key (CEK).</param>
+    /// <param name="value">The <see cref="EncryptedValue"/> to decrypt.</param>
+    /// <returns>Returns the decrypted content string.</returns>
+    string DecryptContentString(byte[] key, EncryptedValue value);
 
     /// <summary>
     /// Decrypts the provided encrypted <paramref name="value"/> using the given plaintext <paramref name="key"/>.
     /// </summary>
     /// <param name="key">The plaintext Content Encryption Key (CEK).</param>
-    /// <param name="value">The encrypted value to decrypt.</param>
-    /// <returns>Returns the decrypted content string.</returns>
-    string DecryptContentString(byte[] key, EncryptedValue value);
+    /// <param name="value">The <see cref="EncryptedValue"/> to decrypt.</param>
+    /// <returns>Returns the decrypted content byte array.</returns>
+    byte[] DecryptContent(byte[] key, EncryptedValue value);
+
+    /// <summary>
+    /// Decrypts the provided encrypted <paramref name="inputStream"/> to the provided <paramref name="outputStream"/>
+    /// using the given plaintext <paramref name="key"/> and <paramref name="iv"/>.
+    /// </summary>
+    /// <param name="key">The plaintext Content Encryption Key (CEK).</param>
+    /// <param name="iv">The initialization vector.</param>
+    /// <param name="inputStream">The <see cref="Stream"/> representing the encrypted data to be decrypted.</param>
+    /// <param name="outputStream">A writable <see cref="Stream"/> where the decrypted content will be written.</param>
+    /// <returns>Returns a task that represents the asynchronous decryption operation.</returns>
+    Task DecryptContent(byte[] key, byte[] iv, Stream inputStream, Stream outputStream);
 }

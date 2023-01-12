@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <PackageId>F23.EnvelopeEncryption.KeyVault</PackageId>
     <PackageTags>encryption;envelope;key;vault;azure</PackageTags>
     <Copyright>Copyright 2022 feature[23]</Copyright>
@@ -30,8 +30,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="System.Interactive.Async" Version="6.0.1"/>
-    <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+    <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\logo.png" Pack="true" PackagePath="\" />

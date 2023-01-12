@@ -17,6 +17,17 @@ public interface IContentKeyEncryptionService
     Task<EncryptedKey> EncryptContentEncryptionKeyAsync(byte[] key, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Encrypts a list of Content Encryption Keys (CEKs) so that they can be safely stored
+    /// alongside encrypted content values. Order of encrypted key output matches order
+    /// of cleartext input.
+    /// </summary>
+    /// <param name="keys">The CEKs to encrypt.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>Returns a list of records with the encrypted CEKs and any information needed during decryption.</returns>
+    Task<IList<EncryptedKey>> EncryptContentEncryptionKeysAsync(IList<byte[]> keys,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Decrypts the encrypted Content Encryption Key (CEK), producing a byte-array
     /// key that can be used in AES encryption/decryption operations.
     /// </summary>

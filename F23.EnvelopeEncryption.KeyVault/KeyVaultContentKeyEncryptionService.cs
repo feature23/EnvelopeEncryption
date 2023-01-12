@@ -56,6 +56,37 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
     }
 
     /// <summary>
+    /// Encrypts a list of Content Encryption Keys (CEKs) so that they can be safely stored
+    /// alongside encrypted content values. Order of encrypted key output matches order
+    /// of cleartext input.
+    /// </summary>
+    /// <param name="keys">The CEKs to encrypt.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>Returns a list of records with the encrypted CEKs and any information needed during decryption.</returns>
+    public async Task<IList<EncryptedKey>> EncryptContentEncryptionKeysAsync(IList<byte[]> keys,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrEmpty(_options.KeyEncryptionKeyName))
+        {
+            throw new InvalidOperationException($"Missing KeyEncryptionKeyName options value in {KeyVaultEnvelopeEncryptionOptions.Options}");
+        }
+        
+        var kek = await _keyClient.GetKeyAsync(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion, 
+            cancellationToken);
+
+        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(kek.Value.Id, CreateAzureCredentialOptions());
+        
+        // TODO: support specifying algorithm in options
+        var results = await keys.ToAsyncEnumerable()
+            .SelectAwaitWithCancellation(async (key, ct) =>
+                await cryptoClient.EncryptAsync(EncryptParameters.RsaOaep256Parameters(key), ct))
+            .Select(result => new EncryptedKey(result.KeyId, result.Ciphertext, result.Algorithm.ToString()))
+            .ToListAsync(cancellationToken);
+
+        return results;
+    }
+
+    /// <summary>
     /// Decrypts the given encrypted <paramref name="key"/>.
     /// </summary>
     /// <param name="key">The encrypted Content Encryption Key (CEK) to decrypt.</param>

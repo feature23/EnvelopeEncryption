@@ -14,6 +14,14 @@ internal class MockContentKeyEncryptionService : IContentKeyEncryptionService
         return Task.FromResult(new EncryptedKey("test", _aes.EncryptCbc(key, _aes.IV), "mock"));
     }
 
+    public Task<IList<EncryptedKey>> EncryptContentEncryptionKeysAsync(IList<byte[]> keys,
+        CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult((IList<EncryptedKey>)keys
+            .Select(key => new EncryptedKey("test", _aes.EncryptCbc(key, _aes.IV), "mock"))
+            .ToList());
+    }
+
     public Task<byte[]> DecryptContentEncryptionKeyAsync(EncryptedKey key, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(_aes.DecryptCbc(key.Key, _aes.IV));

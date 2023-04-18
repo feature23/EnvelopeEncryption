@@ -18,7 +18,6 @@ public static class DependencyExtensions
     public static EnvelopeEncryptionBuilder AddKeyVault(this EnvelopeEncryptionBuilder builder)
     {
         builder.Services.AddTransient<IContentKeyEncryptionService, KeyVaultContentKeyEncryptionService>();
-        builder.Services.AddTransient<CryptographyClientFactory>();
 
         builder.Services.AddOptions<KeyVaultEnvelopeEncryptionOptions>()
             .Configure<IConfiguration>((options, config) => config.GetSection(KeyVaultEnvelopeEncryptionOptions.Options).Bind(options));

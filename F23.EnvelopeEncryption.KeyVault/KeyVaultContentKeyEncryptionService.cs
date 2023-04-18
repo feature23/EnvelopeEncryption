@@ -1,5 +1,4 @@
-﻿using Azure.Identity;
-using Azure.Security.KeyVault.Keys;
+﻿using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Keys.Cryptography;
 using Microsoft.Extensions.Options;
 
@@ -12,22 +11,18 @@ namespace F23.EnvelopeEncryption.KeyVault;
 public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
 {
     private readonly KeyClient _keyClient;
-    private readonly CryptographyClientFactory _cryptographyClientFactory;
     private readonly KeyVaultEnvelopeEncryptionOptions _options;
 
     /// <summary>
     /// Creates a new KeyVaultEnvelopeEncryptionService instance.
     /// </summary>
     /// <param name="keyClient">The Key Vault Key client.</param>
-    /// <param name="cryptographyClientFactory">A Cryptography Client Factory instance.</param>
     /// <param name="options">Options for this service.</param>
     public KeyVaultContentKeyEncryptionService(
         KeyClient keyClient,
-        CryptographyClientFactory cryptographyClientFactory, 
         IOptions<KeyVaultEnvelopeEncryptionOptions> options)
     {
         _keyClient = keyClient;
-        _cryptographyClientFactory = cryptographyClientFactory;
         _options = options.Value;
     }
 
@@ -44,10 +39,7 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
             throw new InvalidOperationException($"Missing KeyEncryptionKeyName options value in {KeyVaultEnvelopeEncryptionOptions.Options}");
         }
         
-        var kek = await _keyClient.GetKeyAsync(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion, 
-            cancellationToken);
-
-        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(kek.Value.Id, CreateAzureCredentialOptions());
+        var cryptoClient = _keyClient.GetCryptographyClient(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion);
 
         // TODO: support specifying algorithm in options
         var result = await cryptoClient.EncryptAsync(EncryptParameters.RsaOaep256Parameters(key), cancellationToken);
@@ -70,11 +62,8 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
         {
             throw new InvalidOperationException($"Missing KeyEncryptionKeyName options value in {KeyVaultEnvelopeEncryptionOptions.Options}");
         }
-        
-        var kek = await _keyClient.GetKeyAsync(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion, 
-            cancellationToken);
 
-        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(kek.Value.Id, CreateAzureCredentialOptions());
+        var cryptoClient = _keyClient.GetCryptographyClient(_options.KeyEncryptionKeyName, _options.KeyEncryptionKeyVersion);
         
         // TODO: support specifying algorithm in options
         var results = await keys.ToAsyncEnumerable()
@@ -94,24 +83,13 @@ public class KeyVaultContentKeyEncryptionService : IContentKeyEncryptionService
     /// <returns>Returns the decrypted key.</returns>
     public async Task<byte[]> DecryptContentEncryptionKeyAsync(EncryptedKey key, CancellationToken cancellationToken = default)
     {
-        var cryptoClient = _cryptographyClientFactory.CreateFromKeyUri(key.KeyId, CreateAzureCredentialOptions());
+        var keyIdentifier = new KeyVaultKeyIdentifier(new Uri(key.KeyId));
+        
+        var cryptoClient = _keyClient.GetCryptographyClient(keyIdentifier.Name, keyIdentifier.Version);
         
         // TODO: support determining algorithm from key.Algorithm value
         var result = await cryptoClient.DecryptAsync(DecryptParameters.RsaOaep256Parameters(key.Key), cancellationToken);
 
         return result.Plaintext;
-    }
-
-    internal DefaultAzureCredentialOptions? CreateAzureCredentialOptions()
-    {
-        if (_options.ExcludeManagedIdentityCredential)
-        {
-            return new DefaultAzureCredentialOptions
-            {
-                ExcludeManagedIdentityCredential = true
-            };
-        }
-
-        return null;
     }
 }

@@ -24,8 +24,11 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Pack NuGet - Main Library
+      if: ${{ github.event_name != 'pull_request' }}
       run: dotnet pack **/F23.EnvelopeEncryption.csproj --no-build
     - name: Pack NuGet - KeyVault Library
+      if: ${{ github.event_name != 'pull_request' }}
       run: dotnet pack **/F23.EnvelopeEncryption.KeyVault.csproj --no-build
     - name: Publish NuGet
+      if: ${{ github.event_name != 'pull_request' }}
       run: dotnet nuget push "**/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_PUSH_API_KEY }}

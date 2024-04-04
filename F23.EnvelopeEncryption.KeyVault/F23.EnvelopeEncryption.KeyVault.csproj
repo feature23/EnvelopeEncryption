@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
-    <Version>0.4.0</Version>
+    <Version>0.4.1</Version>
     <PackageId>F23.EnvelopeEncryption.KeyVault</PackageId>
     <PackageTags>encryption;envelope;key;vault;azure</PackageTags>
     <Copyright>Copyright 2022 feature[23]</Copyright>
